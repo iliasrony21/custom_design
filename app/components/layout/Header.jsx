@@ -31,17 +31,17 @@ export default function Header() {
           <h4 className="font-semibold mb-3">Featured</h4>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:text-green-500">
+              <a href="#" className="hover:text-red-500">
                 New Arrivals
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-green-500">
+              <a href="#" className="hover:text-red-500">
                 Best Sellers
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-green-500">
+              <a href="#" className="hover:text-red-500">
                 Limited Edition
               </a>
             </li>
@@ -51,26 +51,30 @@ export default function Header() {
           <h4 className="font-semibold mb-3">Collections</h4>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:text-green-500">
+              <a href="#" className="hover:text-red-500">
                 T-Shirts
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-green-500">
+              <a href="#" className="hover:text-red-500">
                 Hoodies
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-green-500">
+              <a href="#" className="hover:text-red-500">
                 Accessories
               </a>
             </li>
           </ul>
         </div>
-        <div className="bg-gradient-to-r from-green-400 to-emerald-600 rounded-lg p-6 text-white">
+        <div className="bg-gradient-to-r from-red-400 to-red-600
+
+
+
+ rounded-lg p-6 text-white">
           <h4 className="font-bold mb-2">New Season Drop</h4>
           <p className="text-sm mb-3">Up to 30% off</p>
-          <button className="bg-white text-green-600 px-3 py-1 rounded">
+          <button className="bg-white text-red-600 px-3 py-1 rounded">
             Shop Now
           </button>
         </div>
@@ -83,17 +87,17 @@ export default function Header() {
             <h4 className="font-semibold mb-3">{section}</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="hover:text-green-500">
+                <a href="#" className="hover:text-red-500">
                   T-Shirts
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-green-500">
+                <a href="#" className="hover:text-red-500">
                   Jeans
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-green-500">
+                <a href="#" className="hover:text-red-500">
                   Shoes
                 </a>
               </li>
@@ -105,17 +109,17 @@ export default function Header() {
     Pages: (
       <ul className="space-y-2">
         <li>
-          <a href="#" className="hover:text-green-500">
+          <a href="#" className="hover:text-red-500">
             About Us
           </a>
         </li>
         <li>
-          <a href="#" className="hover:text-green-500">
+          <a href="#" className="hover:text-red-500">
             Contact
           </a>
         </li>
         <li>
-          <a href="#" className="hover:text-green-500">
+          <a href="#" className="hover:text-red-500">
             FAQ
           </a>
         </li>
@@ -161,7 +165,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="relative">
+    <header className="relative sticky top-0 z-50 bg-white">
       {/* Topbar */}
       <TopBar />
 
@@ -184,7 +188,7 @@ export default function Header() {
               onMouseEnter={() => handleHover(item)}
               onMouseLeave={handleLeave}
             >
-              <button className="flex items-center gap-1 font-medium hover:text-green-500 transition cursor-pointer">
+              <button className="flex items-center gap-1 font-medium hover:text-red-500 transition cursor-pointer">
                 {item}
                 {dropdowns[item] && (
                   <ChevronDown className="w-4 h-4 mt-[2px]" />
@@ -214,15 +218,15 @@ export default function Header() {
 
         {/* Icons */}
         <div className="flex items-center gap-5 px-4 md:px-0">
-          <User className="w-5 h-5 cursor-pointer hover:text-green-500" />
-          <Star className="w-5 h-5 cursor-pointer hover:text-green-500" />
+          <User className="w-5 h-5 cursor-pointer hover:text-red-500" />
+          <Star className="w-5 h-5 cursor-pointer hover:text-red-500" />
           <div className="relative">
-            <ShoppingBag className="w-5 h-5 cursor-pointer hover:text-green-500" />
-            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
+            <ShoppingBag className="w-5 h-5 cursor-pointer hover:text-red-500" />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
               0
             </span>
           </div>
-          <button className="hidden md:block border border-gray-300 px-4 py-1.5 rounded-lg hover:bg-green-400 hover:text-white">
+          <button className="hidden md:block border border-gray-300 px-4 py-1.5 rounded-lg hover:bg-red-400 hover:text-white">
             Bulk Order
           </button>
         </div>
@@ -268,14 +272,14 @@ export default function Header() {
                         <div className="flex items-center justify-between font-medium text-lg mb-2">
                           <a 
                             href={item.href} 
-                            className="hover:text-green-500"
+                            className="hover:text-red-500"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {item.name}
                           </a>
                           <button 
                             onClick={() => toggleExpandedItem(item.name)}
-                            className="p-1 hover:text-green-500"
+                            className="p-1 hover:text-red-500"
                           >
                             {expandedItems.includes(item.name) ? (
                               <Minus className="w-4 h-4" />
@@ -291,7 +295,7 @@ export default function Header() {
                               <li key={subItem.name}>
                                 <a 
                                   href={subItem.href} 
-                                  className="block py-2 text-gray-600 hover:text-green-500"
+                                  className="block py-2 text-gray-600 hover:text-red-500"
                                   onClick={() => setMobileMenuOpen(false)}
                                 >
                                   {subItem.name}
@@ -304,7 +308,7 @@ export default function Header() {
                     ) : (
                       <a 
                         href={item.href} 
-                        className="block font-medium text-lg py-2 hover:text-green-500"
+                        className="block font-medium text-lg py-2 hover:text-red-500"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
@@ -327,7 +331,7 @@ export default function Header() {
                 <div className="flex flex-col items-center">
                   <div className="relative">
                     <ShoppingBag className="w-6 h-6 mb-1" />
-                    <span className="absolute -top-1 -right-2 bg-green-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
                       0
                     </span>
                   </div>
@@ -336,7 +340,7 @@ export default function Header() {
               </div>
 
               {/* Bulk Order Button for Mobile */}
-              <button className="w-full mt-6 border border-gray-300 px-4 py-3 rounded-lg hover:bg-green-400 hover:text-white font-medium">
+              <button className="w-full mt-6 border border-gray-300 px-4 py-3 rounded-lg hover:bg-red-400 hover:text-white font-medium">
                 Bulk Order
               </button>
             </div>

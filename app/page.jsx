@@ -3,6 +3,8 @@ import ShowcaseSection from "./(home)/ShowcaseSection";
 import HeroSection from "./(home)/HeroSection";
 import FeaturedSection from "./(home)/FeaturedSection";
 import Idea_and_tools_section from "./(home)/Idea_and_tools_section";
+import WorkingProcedure from "./(home)/WorkingProcedure";
+import CategoriesSection from './(home)/CategoriesSection';
 
 export default function Home() {
   return (
@@ -11,6 +13,8 @@ export default function Home() {
       <ShowcaseSection />
       <FeaturedSection />
       <Idea_and_tools_section />
+      <WorkingProcedure />
+      <CategoriesSection />
     </div>
   );
 }

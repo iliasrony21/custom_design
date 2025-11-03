@@ -6,8 +6,8 @@ import kids from "../../public/kids.jpg";
 
 export default function SectionDesignYourOwn() {
   return (
-    <section className="bg-gray-100 py-16">
-      <div className=" mx-auto container px-4 md:px-0">
+    <section className=" py-16">
+      <div className=" mx-auto container px-4 md:px-4 2xl:px-0">
         {/* Text + Button */}
 
         {/* Banners Grid */}

@@ -5,6 +5,7 @@ import FeaturedSection from "./(home)/FeaturedSection";
 import Idea_and_tools_section from "./(home)/Idea_and_tools_section";
 import WorkingProcedure from "./(home)/WorkingProcedure";
 import CategoriesSection from './(home)/CategoriesSection';
+import CatalogSection from "./(home)/CatalogSection";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Idea_and_tools_section />
       <WorkingProcedure />
       <CategoriesSection />
+      <CatalogSection/>
     </div>
   );
 }

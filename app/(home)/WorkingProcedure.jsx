@@ -28,7 +28,7 @@ export default function WorkingProcedure() {
   ];
 
   return (
-    <section className="w-full py-16 bg-gray-50 px-4 md:px-0">
+    <section className="w-full py-16 container mx-auto px-4 2xl:px-0">
       {/* Header */}
       <div className="text-center mb-16">
         <Link

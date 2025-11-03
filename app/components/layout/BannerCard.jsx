@@ -10,7 +10,7 @@ export default function BannerCard({ title, imgSrc, href }) {
       className="
         group relative block overflow-hidden rounded-xl
         transition-all duration-500 ease-out
-        hover:-translate-y-3 hover:shadow-3xl
+        hover:-translate-y-5 hover:shadow-2xl
       "
     >
       {/* Image */}

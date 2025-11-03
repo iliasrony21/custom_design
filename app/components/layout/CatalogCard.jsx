@@ -30,16 +30,16 @@ export default function CatalogCard({
 
         {/* Text Content */}
         <div className="space-y-2">
-          <h3 className="text-xl text-center font-semibold text-gray-900 group-hover:text-white transition-colors">
+          <h3 className="text-md md:text-xl text-center font-semibold text-gray-900 group-hover:text-white transition-colors">
             {title}
           </h3>
-          <p className="text-sm text-gray-600 group-hover:text-white/90 leading-relaxed transition-colors">
+          <p className="text-sm md:text-start text-center text-gray-600 group-hover:text-white/90 leading-relaxed transition-colors">
             {description}
           </p>
         </div>
 
         {/* Hover Arrow */}
-        <div className="mt-4 flex items-center justify-center text-sm font-medium text-gray-500 group-hover:text-white transition-colors">
+        <div className="md:text-start text-center mt-4 flex items-center justify-center text-sm font-medium text-gray-500 group-hover:text-white transition-colors">
           Explore collection
           <svg 
             className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" 

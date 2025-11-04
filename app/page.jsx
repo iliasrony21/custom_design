@@ -8,6 +8,7 @@ import CategoriesSection from './(home)/CategoriesSection';
 import CatalogSection from "./(home)/CatalogSection";
 import WorkingSteps from "./(home)/WorkingSteps";
 import TrustedCompaniesSection from "./(home)/TrustedCompanies";
+import FaqSection from "./(home)/FaqSection";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <CatalogSection/>
       <WorkingSteps/>
       <TrustedCompaniesSection/>
+      <FaqSection/>
     </div>
   );
 }

@@ -112,7 +112,7 @@ export default function CatalogSection() {
   ];
 
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-16 px-4">
       <div className="container mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">

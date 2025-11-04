@@ -9,6 +9,7 @@ import CatalogSection from "./(home)/CatalogSection";
 import WorkingSteps from "./(home)/WorkingSteps";
 import TrustedCompaniesSection from "./(home)/TrustedCompanies";
 import FaqSection from "./(home)/FaqSection";
+import BlogSection from "./(home)/BlogSection";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       <WorkingSteps/>
       <TrustedCompaniesSection/>
       <FaqSection/>
+      <BlogSection/>
     </div>
   );
 }

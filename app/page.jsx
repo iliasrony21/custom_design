@@ -10,6 +10,7 @@ import WorkingSteps from "./(home)/WorkingSteps";
 import TrustedCompaniesSection from "./(home)/TrustedCompanies";
 import FaqSection from "./(home)/FaqSection";
 import BlogSection from "./(home)/BlogSection";
+import AddBanner2 from "./(home)/AddBanner2";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
       <TrustedCompaniesSection/>
       <FaqSection/>
       <BlogSection/>
+      <AddBanner2/>
     </div>
   );
 }

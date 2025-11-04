@@ -77,7 +77,7 @@ export default function BlogSection() {
         </div>
 
         {/* Custom navigation buttons */}
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+        <div className="absolute left-4 2xl:left-40 top-1/2 -translate-y-1/2 z-10">
           <button className="custom-prev w-12 h-12 bg-white border border-gray-200 shadow-md rounded-full flex items-center justify-center text-gray-700 hover:bg-red-500 hover:text-white transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +92,7 @@ export default function BlogSection() {
           </button>
         </div>
 
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+        <div className="absolute right-4 2xl:right-40 top-1/2 -translate-y-1/2 z-10">
           <button className="custom-next w-12 h-12 bg-white border border-gray-200 shadow-md rounded-full flex items-center justify-center text-gray-700 hover:bg-red-500 hover:text-white transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"

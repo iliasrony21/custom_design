@@ -1,4 +1,4 @@
-
+// app/(shop)/shopPage/page.jsx
 "use client";
 import { useState, useMemo } from "react";
 import Link from "next/link";
@@ -8,6 +8,8 @@ import product3 from '@/public/product3.jpg';
 import product4 from '@/public/product4.jpg';
 import product5 from '@/public/product5.jpg';
 import product6 from '@/public/product6.jpg';
+import Image from "next/image";
+import ProductCard from "@/app/components/layout/ProductCard";
 
 // Helper function for color CSS - moved to top
 function colorCss(name) {
@@ -159,115 +161,12 @@ const SAMPLE_PRODUCTS = [
   },
 ];
 
-function Price({ min, max }) {
-  if (min === max) return <>${min.toFixed(2)}</>;
-  return <>${min.toFixed(2)} — ${max.toFixed(2)}</>;
-}
+// function Price({ min, max }) {
+//   if (min === max) return <>${min.toFixed(2)}</>;
+//   return <>${min.toFixed(2)} — ${max.toFixed(2)}</>;
+// }
 
-function ColorDot({ color }) {
-  // maps simple color keywords to Tailwind bg classes
-  const map = {
-    black: "bg-black",
-    white: "bg-white border",
-    brown: "bg-amber-700",
-    yellow: "bg-yellow-300",
-    blue: "bg-blue-400",
-    gray: "bg-gray-300",
-    lilac: "bg-violet-300",
-  };
-  const cls = map[color] || "bg-gray-400";
-  return <span className={`w-3 h-3 rounded-full ${cls} inline-block mr-1`}></span>;
-}
 
-function ProductCard({ product }) {
-  return (
-    <article className="border rounded-2xl p-4 shadow-sm hover:shadow-lg transition group bg-white relative">
-      {/* Badge */}
-      {product.badge && (
-        <span
-          className={`absolute top-3 left-3 text-xs px-2 py-1 rounded-full ${
-            product.badge === "Sale"
-              ? "bg-green-500 text-white"
-              : product.badge === "New"
-              ? "bg-indigo-500 text-white"
-              : product.badge === "Hot"
-              ? "bg-orange-400 text-white"
-              : product.badge === "Sold out"
-              ? "bg-gray-700 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          {product.badge}
-        </span>
-      )}
-
-      {/* Image */}
-      <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-100 mb-4 flex items-center justify-center">
-        {/* HTML <img> used here for simplicity — you may swap to next/image if desired */}
-        <img
-          src={product.image.src}
-          alt={product.name}
-          className="object-cover w-full h-full"
-        />
-
-        {/* Hover icons */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-end justify-center opacity-0 group-hover:opacity-100">
-          <div className="mb-4 flex gap-2">
-            <button
-              aria-label="Add to wishlist"
-              className="bg-white w-9 h-9 rounded-full flex items-center justify-center shadow hover:scale-105 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M12 21s-7-4.35-9.5-7.5C-1 8 6 3 12 8c6-5 13 0 9.5 5.5C19 16.65 12 21 12 21z" fill="#111827" />
-              </svg>
-            </button>
-            <button
-              aria-label="Quick view"
-              className="bg-white w-9 h-9 rounded-full flex items-center justify-center shadow hover:scale-105 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M12 5c-7 0-11 6-11 7s4 7 11 7 11-6 11-7-4-7-11-7zm0 11a4 4 0 110-8 4 4 0 010 8z" fill="#111827" />
-              </svg>
-            </button>
-            <button
-              aria-label="Compare"
-              className="bg-white w-9 h-9 rounded-full flex items-center justify-center shadow hover:scale-105 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M10 3H5a2 2 0 00-2 2v5" stroke="#111827" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M14 21h5a2 2 0 002-2v-5" stroke="#111827" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M21 7L9 19" stroke="#111827" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Sold out overlay */}
-        {product.soldOut && (
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="text-white font-semibold bg-black/60 px-4 py-2 rounded-full">Sold out</span>
-          </div>
-        )}
-      </div>
-
-      {/* Info */}
-      <h3 className="font-medium text-sm mb-1">{product.name}</h3>
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-700">
-          <Price min={product.priceMin} max={product.priceMax} />
-        </div>
-        <div className="text-xs text-gray-500"> • {product.colors.length}+</div>
-      </div>
-
-      {/* Color dots */}
-      <div className="mt-3">
-        {product.colors.map((c, idx) => (
-          <ColorDot key={idx} color={c} />
-        ))}
-      </div>
-    </article>
-  );
-}
 
 export default function ShopPage() {
   const [openMobileFilters, setOpenMobileFilters] = useState(false);
@@ -332,14 +231,15 @@ export default function ShopPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-10">
+          {/* Header */}
+        <div className="text-center mb-10 bg-gray-100 py-12">
           <h1 className="text-3xl font-semibold">Shop</h1>
           <p className="text-sm text-gray-500 mt-1">Home — Shop</p>
         </div>
+      <div className="container mx-auto px-8 2xl:px-0">
+      
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 px-4 ">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setOpenMobileFilters(true)}
@@ -368,7 +268,7 @@ export default function ShopPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
+        <div className="grid grid-cols-12 gap-8 px-4">
           {/* Sidebar (desktop) */}
           <aside className="col-span-3 hidden lg:block">
             <div className="space-y-8">
@@ -389,11 +289,11 @@ export default function ShopPage() {
               {/* Categories */}
               <div>
                 <h4 className="font-semibold mb-3">Product categories</h4>
-                <ul className="space-y-2 text-sm text-gray-700">
+                <ul className="space-y-2 text-sm text-gray-700 ">
                   <li>
                     <button
                       onClick={() => setSelectedCategory(null)}
-                      className={`text-left w-full ${selectedCategory === null ? "font-semibold" : "text-gray-600"}`}
+                      className={`text-left cursor-pointer w-full ${selectedCategory === null ? "font-semibold" : "text-gray-600"}`}
                     >
                       All
                     </button>
@@ -402,7 +302,7 @@ export default function ShopPage() {
                     <li key={c}>
                       <button
                         onClick={() => setSelectedCategory(c)}
-                        className={`text-left w-full ${selectedCategory === c ? "font-semibold" : "text-gray-600"}`}
+                        className={`text-left cursor-pointer w-full ${selectedCategory === c ? "font-semibold" : "text-gray-600"}`}
                       >
                         {c}
                       </button>
@@ -420,7 +320,7 @@ export default function ShopPage() {
                   max={150}
                   value={priceMax}
                   onChange={(e) => setPriceMax(Number(e.target.value))}
-                  className="w-full accent-black"
+                  className="w-full cursor-pointer accent-black "
                 />
                 <div className="text-sm text-gray-600 mt-2">Price: $10 — ${priceMax}</div>
               </div>

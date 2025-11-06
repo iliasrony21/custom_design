@@ -26,9 +26,9 @@ export default function SectionDesignYourOwn() {
               Get Started
             </Link>
           </div>
-          <BannerCard title="Women’s Collection" imgSrc={women} href="'/" />
-          <BannerCard title="Men’s Collection" imgSrc={men} href="/" />
-          <BannerCard title="Kid’s Collection" imgSrc={kids} href="/" />
+          <BannerCard title="Women’s Collection" imgSrc={women} href="/shopPage" />
+          <BannerCard title="Men’s Collection" imgSrc={men} href="/shopPage" />
+          <BannerCard title="Kid’s Collection" imgSrc={kids} href="/shopPage" />
         </div>
       </div>
     </section>

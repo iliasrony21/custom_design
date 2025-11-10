@@ -37,18 +37,27 @@ export default function Page() {
 
   const [view, setView] = useState("front");
   const [showUploadPanel, setShowUploadPanel] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImages, setUploadedImages] = useState({
+    front: [],
+    back: [],
+  });
+  const [selectedImageForEditing, setSelectedImageForEditing] = useState(null);
+  const [uploadMode, setUploadMode] = useState(true); // true = upload, false = edit
 
   const dragData = useRef({ x: 0, y: 0, startX: 0, startY: 0 });
   const rotateData = useRef({ angle: 0 });
   const resizeData = useRef({ size: 200 });
 
-  // upload handler
+  // Get current uploaded images based on view
+  const currentUploadedImages = uploadedImages[view];
+
+  // Handle upload - add new image to current view
   const handleUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const url = URL.createObjectURL(file);
-    setUploadedImage({
+
+    const newImage = {
       id: Date.now(),
       url,
       name: file.name,
@@ -56,83 +65,241 @@ export default function Page() {
       y: 130,
       size: 230,
       rotate: 0,
-    });
+      width: width,
+      height: height,
+      contrast: contrast,
+      oneColor: oneColor,
+      invertColor: invertColor,
+      shades: shades,
+      removeBg: removeBg,
+      rotation: rotation,
+    };
+
+    // Add to current view
+    setUploadedImages((prev) => ({
+      ...prev,
+      [view]: [...prev[view], newImage],
+    }));
+
+    // Automatically select the new image for editing
+    setSelectedImageForEditing(newImage);
+    setUploadMode(false); // Switch to edit mode
   };
 
-  // drag
-  const handleDrag = (e) => {
-    if (!uploadedImage) return;
+  // Handle drag
+  const handleDrag = (e, imageId) => {
+    const image = currentUploadedImages.find((img) => img.id === imageId);
+    if (!image) return;
+
     dragData.current = {
-      x: uploadedImage.x,
-      y: uploadedImage.y,
+      x: image.x,
+      y: image.y,
       startX: e.clientX,
       startY: e.clientY,
     };
+
     const move = (ev) => {
       const dx = ev.clientX - dragData.current.startX;
       const dy = ev.clientY - dragData.current.startY;
-      setUploadedImage((prev) => ({
+
+      setUploadedImages((prev) => ({
         ...prev,
-        x: dragData.current.x + dx,
-        y: dragData.current.y + dy,
+        [view]: prev[view].map((img) =>
+          img.id === imageId
+            ? { ...img, x: dragData.current.x + dx, y: dragData.current.y + dy }
+            : img
+        ),
       }));
     };
+
     const up = () => {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseup", up);
     };
+
     window.addEventListener("mousemove", move);
     window.addEventListener("mouseup", up);
   };
 
-  // resize
-  const handleResize = (e) => {
+  // Handle resize
+  const handleResize = (e, imageId) => {
     e.stopPropagation();
-    resizeData.current.size = uploadedImage.size;
+    const image = currentUploadedImages.find((img) => img.id === imageId);
+    if (!image) return;
+
+    resizeData.current.size = image.size;
     const startY = e.clientY;
+
     const move = (ev) => {
       const delta = ev.clientY - startY;
-      setUploadedImage((prev) => ({
+      setUploadedImages((prev) => ({
         ...prev,
-        size: Math.max(80, resizeData.current.size + delta),
+        [view]: prev[view].map((img) =>
+          img.id === imageId
+            ? { ...img, size: Math.max(80, resizeData.current.size + delta) }
+            : img
+        ),
       }));
     };
+
     const up = () => {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseup", up);
     };
+
     window.addEventListener("mousemove", move);
     window.addEventListener("mouseup", up);
   };
 
-  // rotate
-  const handleRotate = (e) => {
+  // Handle rotate
+  const handleRotate = (e, imageId) => {
     e.stopPropagation();
+    const image = currentUploadedImages.find((img) => img.id === imageId);
+    if (!image) return;
+
     const startX = e.clientX;
-    rotateData.current.angle = uploadedImage.rotate;
+    rotateData.current.angle = image.rotate;
+
     const move = (ev) => {
       const delta = ev.clientX - startX;
-      setUploadedImage((prev) => ({
+      setUploadedImages((prev) => ({
         ...prev,
-        rotate: rotateData.current.angle + delta * 0.5,
+        [view]: prev[view].map((img) =>
+          img.id === imageId
+            ? { ...img, rotate: rotateData.current.angle + delta * 0.5 }
+            : img
+        ),
       }));
     };
+
     const up = () => {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseup", up);
     };
+
     window.addEventListener("mousemove", move);
     window.addEventListener("mouseup", up);
   };
 
-  const removeUpload = () => setUploadedImage(null);
+  // Remove uploaded image
+  const removeUpload = (imageId) => {
+    setUploadedImages((prev) => ({
+      ...prev,
+      [view]: prev[view].filter((img) => img.id !== imageId),
+    }));
+
+    // If we're removing the currently selected image, clear selection
+    if (selectedImageForEditing && selectedImageForEditing.id === imageId) {
+      setSelectedImageForEditing(null);
+      setUploadMode(true);
+    }
+  };
+
+  // Handle image click to select for editing
+  const handleImageClick = (image) => {
+    setSelectedImageForEditing(image);
+    setUploadMode(false);
+    setShowUploadPanel(true);
+  };
+
+  // Handle upload button click - always show upload interface
+  const handleUploadButtonClick = () => {
+    setShowUploadPanel(true);
+    setUploadMode(true);
+    setSelectedImageForEditing(null);
+  };
+
+  // Handle view change
+  const handleViewChange = (newView) => {
+    setView(newView);
+    setSelectedImageForEditing(null);
+    setUploadMode(true);
+  };
+
+  // Apply edits to the selected image
+  const applyEdits = () => {
+    if (selectedImageForEditing) {
+      setUploadedImages((prev) => ({
+        ...prev,
+        [view]: prev[view].map((img) =>
+          img.id === selectedImageForEditing.id
+            ? {
+                ...img,
+                width: width,
+                height: height,
+                contrast: contrast,
+                oneColor: oneColor,
+                invertColor: invertColor,
+                shades: shades,
+                removeBg: removeBg,
+                rotation: rotation,
+              }
+            : img
+        ),
+      }));
+    }
+    setShowUploadPanel(false);
+  };
+
+  // Reset to original uploaded image
+  const resetToOriginal = () => {
+    if (selectedImageForEditing) {
+      // Reset all edit properties to default
+      setWidth(8.4);
+      setHeight(11.2);
+      setContrast(200);
+      setOneColor(true);
+      setInvertColor(false);
+      setShades(false);
+      setRemoveBg(true);
+      setRotation(0);
+
+      // Reset image position and size
+      setUploadedImages((prev) => ({
+        ...prev,
+        [view]: prev[view].map((img) =>
+          img.id === selectedImageForEditing.id
+            ? {
+                ...img,
+                x: 290,
+                y: 130,
+                size: 230,
+                rotate: 0,
+                width: 8.4,
+                height: 11.2,
+                contrast: 200,
+                oneColor: true,
+                invertColor: false,
+                shades: false,
+                removeBg: true,
+                rotation: 0,
+              }
+            : img
+        ),
+      }));
+    }
+  };
+
+  // Center the selected image
+  const centerImage = () => {
+    if (selectedImageForEditing) {
+      setUploadedImages((prev) => ({
+        ...prev,
+        [view]: prev[view].map((img) =>
+          img.id === selectedImageForEditing.id
+            ? { ...img, x: 290, y: 130 }
+            : img
+        ),
+      }));
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 pb-10 relative">
       {/* Sidebar */}
       <aside className="w-28 bg-gray-900 text-white flex flex-col items-center py-6 space-y-6">
         <button
-          onClick={() => setShowUploadPanel(true)}
+          onClick={handleUploadButtonClick}
           className="flex flex-col items-center hover:text-red-400"
         >
           <ImageUp />
@@ -155,11 +322,11 @@ export default function Page() {
       {/* Main left section */}
       <aside className="w-1/3 2xl:w-[400px] bg-white shadow-md z-20 relative">
         <div className="p-10">
-          <h2 className="text-2xl font-bold mb-8">What’s next for you?</h2>
+          <h2 className="text-2xl font-bold mb-8">What's next for you?</h2>
 
           <div className="grid grid-cols-2 gap-6">
             <div
-              onClick={() => setShowUploadPanel(true)}
+              onClick={handleUploadButtonClick}
               className="flex flex-col items-center justify-center hover:shadow-lg cursor-pointer"
             >
               <ImageUp className="text-4xl mb-2" />
@@ -191,7 +358,9 @@ export default function Page() {
         {showUploadPanel && (
           <div className="absolute inset-0 bg-white border-l border-gray-200 shadow-2xl flex flex-col">
             <div className="flex justify-between items-center px-6 py-4 border-b">
-              <h3 className="text-lg font-semibold">Edit Uploads</h3>
+              <h3 className="text-lg font-semibold">
+                {uploadMode ? "Upload Image" : "Edit Uploads"}
+              </h3>
               <button
                 onClick={() => setShowUploadPanel(false)}
                 className="text-gray-600 hover:text-red-500"
@@ -200,7 +369,8 @@ export default function Page() {
               </button>
             </div>
 
-            {!uploadedImage ? (
+            {uploadMode ? (
+              // Upload interface - ALWAYS shows when clicking upload button
               <div className="flex-1 flex flex-col items-center justify-center">
                 <label
                   htmlFor="file-upload"
@@ -218,6 +388,7 @@ export default function Page() {
                 <p className="mt-4 text-gray-500">or Drag & Drop Anywhere</p>
               </div>
             ) : (
+              // Edit interface - only shows when an image is selected for editing
               <div className="flex flex-col space-y-4 p-4 bg-white rounded-lg shadow-lg w-full overflow-auto">
                 {/* Upload Size */}
                 <div className="border-b border-gray-200 pb-4 flex justify-between">
@@ -225,7 +396,7 @@ export default function Page() {
                     <h3 className="text-sm font-medium">Upload Size</h3>
                     <p className="text-xs text-gray-500">Width × Height (in)</p>
                   </div>
-                  <div className="right  space-x-2 mt-2">
+                  <div className="right space-x-2 mt-2">
                     <input
                       type="number"
                       value={width}
@@ -320,14 +491,16 @@ export default function Page() {
                   />
                 </div>
 
-                {/* styles  */}
+                {/* Styles */}
                 <div className="bg-white border-b border-gray-200 p-3 space-y-3">
                   {/* Row 1 */}
                   <div className="flex items-center space-x-6">
                     {/* Center Tool */}
                     <div className="flex flex-col items-center">
-                      <button className="disabled:opacity-50 p-2 rounded hover:bg-gray-100">
-                        {/* Replace with your SVG */}
+                      <button
+                        className="disabled:opacity-50 p-2 rounded hover:bg-gray-100"
+                        onClick={centerImage}
+                      >
                         <AlignHorizontalSpaceAround />
                       </button>
                       <span className="text-xs mt-1 text-gray-600">Center</span>
@@ -337,10 +510,10 @@ export default function Page() {
                     <div className="flex flex-col items-center">
                       <div className="flex space-x-1">
                         <button className="p-2 rounded hover:bg-gray-100">
-                          <Layers></Layers>
+                          <Layers />
                         </button>
                         <button className="p-2 rounded hover:bg-gray-100">
-                          <Layers2></Layers2>
+                          <Layers2 />
                         </button>
                       </div>
                       <span className="text-xs mt-1 text-gray-600">
@@ -352,10 +525,10 @@ export default function Page() {
                     <div className="flex flex-col items-center">
                       <div className="flex space-x-1">
                         <button className="p-2 rounded hover:bg-gray-100">
-                          <FlipHorizontal2></FlipHorizontal2>
+                          <FlipHorizontal2 />
                         </button>
                         <button className="p-2 rounded hover:bg-gray-100">
-                          <FlipVertical2></FlipVertical2>
+                          <FlipVertical2 />
                         </button>
                       </div>
                       <span className="text-xs mt-1 text-gray-600">Flip</span>
@@ -367,7 +540,7 @@ export default function Page() {
                     {/* Duplicate Tool */}
                     <div className="flex flex-col items-center">
                       <button className="p-2 rounded hover:bg-gray-100">
-                        <Copy></Copy>
+                        <Copy />
                       </button>
                       <span className="text-xs mt-1 text-gray-600">
                         Duplicate
@@ -404,11 +577,17 @@ export default function Page() {
                 </div>
 
                 {/* Buttons */}
-                <div className="flex flex-1  gap-4">
-                  <button className=" px-4 py-2 text-red-600 border border-red-600 rounded hover:bg-red-50">
+                <div className="flex flex-1 gap-4">
+                  <button
+                    onClick={resetToOriginal}
+                    className="px-4 py-2 text-red-600 border border-red-600 rounded hover:bg-red-50"
+                  >
                     Reset To Original
                   </button>
-                  <button className=" px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                  <button
+                    onClick={applyEdits}
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                  >
                     Save Design
                   </button>
                 </div>
@@ -428,55 +607,69 @@ export default function Page() {
             className="object-contain rounded-lg"
           />
 
-          {/* Uploaded image overlay */}
-          {uploadedImage && (
+          {/* Uploaded image overlays - Multiple images can be displayed */}
+          {currentUploadedImages.map((image) => (
             <div
-              className="absolute group"
-              onMouseDown={handleDrag}
+              key={image.id}
+              className="absolute group cursor-move"
+              onMouseDown={(e) => handleDrag(e, image.id)}
+              onClick={() => handleImageClick(image)}
               style={{
-                top: uploadedImage.y,
-                left: uploadedImage.x,
-                width: uploadedImage.size,
-                height: uploadedImage.size,
-                transform: `rotate(${uploadedImage.rotate}deg)`,
+                top: image.y,
+                left: image.x,
+                width: image.size,
+                height: image.size,
+                transform: `rotate(${image.rotate}deg)`,
                 transformOrigin: "center center",
-                cursor: "move",
               }}
             >
               <img
-                src={uploadedImage.url}
+                src={image.url}
                 alt="Uploaded"
-                className="w-full h-full object-contain border border-gray-300 rounded"
+                className={`w-full h-full object-contain border-2 rounded shadow-lg ${
+                  selectedImageForEditing?.id === image.id
+                    ? "border-blue-500"
+                    : "border-gray-300"
+                }`}
               />
               {/* ❌ top-left */}
               <button
-                onClick={removeUpload}
-                className="absolute -top-4 -left-4 bg-white rounded-full p-1 shadow hover:scale-110"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeUpload(image.id);
+                }}
+                className="absolute -top-2 -left-2 bg-white rounded-full p-1 shadow hover:scale-110 z-10"
               >
-                <X className="w-4 h-4 text-red-600" />
+                <X className="w-3 h-3 text-red-600" />
               </button>
               {/* ⟳ bottom-left rotate */}
               <button
-                onMouseDown={handleRotate}
-                className="absolute -bottom-4 -left-4 bg-white rounded-full p-1 shadow hover:scale-110"
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  handleRotate(e, image.id);
+                }}
+                className="absolute -bottom-2 -left-2 bg-white rounded-full p-1 shadow hover:scale-110 z-10"
               >
-                <RotateCw className="w-4 h-4 text-blue-600" />
+                <RotateCw className="w-3 h-3 text-blue-600" />
               </button>
               {/* ⤢ bottom-right resize */}
               <button
-                onMouseDown={handleResize}
-                className="absolute -bottom-4 -right-4 bg-white rounded-full p-1 shadow hover:scale-110 cursor-se-resize"
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  handleResize(e, image.id);
+                }}
+                className="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow hover:scale-110 cursor-se-resize z-10"
               >
-                <Maximize2 className="w-4 h-4 text-green-600" />
+                <Maximize2 className="w-3 h-3 text-green-600" />
               </button>
             </div>
-          )}
+          ))}
         </div>
 
         {/* View toggles */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 space-y-4 flex flex-col">
           <button
-            onClick={() => setView("front")}
+            onClick={() => handleViewChange("front")}
             className={`w-20 h-20 border-2 rounded-xl overflow-hidden ${
               view === "front" ? "border-red-500" : "border-gray-300"
             }`}
@@ -491,7 +684,7 @@ export default function Page() {
             <p className="text-xs font-medium text-center">Front</p>
           </button>
           <button
-            onClick={() => setView("back")}
+            onClick={() => handleViewChange("back")}
             className={`w-20 h-20 border-2 rounded-xl overflow-hidden ${
               view === "back" ? "border-red-500" : "border-gray-300"
             }`}

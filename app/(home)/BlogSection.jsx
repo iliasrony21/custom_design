@@ -1,582 +1,166 @@
-
 "use client";
-import { useState, useMemo } from "react";
-import Link from "next/link";
-import product1 from '@/public/product1.jpg';
-import product2 from '@/public/product2.jpg';
-import product3 from '@/public/product3.jpg';
-import product4 from '@/public/product4.jpg';
-import product5 from '@/public/product5.jpg';
-import product6 from '@/public/product6.jpg';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import Image from "next/image";
+import news1 from "../../public/news1.jpg";
+import news2 from "../../public/news2.jpg";
+import news3 from "../../public/news3.jpg";
+import news4 from "../../public/news4.jpg";
+import { useEffect } from "react";
 
-// Helper function for color CSS - moved to top
-function colorCss(name) {
-  const map = {
-    black: "#111827",
-    brown: "#92400e",
-    red: "#ef4444",
-    white: "#ffffff",
-    yellow: "#facc15",
-    blue: "#3b82f6",
-    gray: "#9ca3af",
-    lilac: "#c4b5fd",
-  };
-  return map[name] || "#9ca3af";
-}
-
-const SAMPLE_PRODUCTS = [
+const blogPosts = [
   {
     id: 1,
-    name: "Adult Quantity Tee",
-    priceMin: 26,
-    priceMax: 29,
-    badge: "Sale",
-    image: product1,
-    colors: ["black", "brown", "white"],
-    soldOut: false,
-    category: "T-Shirt",
+    image: news4,
+    tags: ["Print Company", "Print Shop"],
+    title: "Are you ready to make it awesome with us",
+    author: "admin",
+    date: "August 20, 2022",
   },
   {
     id: 2,
-    name: "All-Over-Print Hoodie",
-    priceMin: 26,
-    priceMax: 29,
-    badge: "New",
-    image: product2,
-    colors: ["gray"],
-    soldOut: false,
-    category: "Hoodie",
+    image: news2,
+    tags: ["Print Company"],
+    title: "The best custom T-shirt designer WordPress theme",
+    author: "admin",
+    date: "August 20, 2022",
   },
   {
     id: 3,
-    name: "AOP Cut & Sew Tee",
-    priceMin: 26,
-    priceMax: 29,
-    badge: "Sale",
-    image: product3,
-    colors: ["white"],
-    soldOut: false,
-    category: "T-Shirt",
+    image: news3,
+    tags: ["Print Shop"],
+    title: "We can make your work better",
+    author: "admin",
+    date: "August 20, 2022",
   },
   {
     id: 4,
-    name: "Fine Jersey Tee",
-    priceMin: 28,
-    priceMax: 28,
-    badge: "Hot",
-    image: product4,
-    colors: ["blue"],
-    soldOut: false,
-    category: "T-Shirt",
-  },
-  {
-    id: 5,
-    name: "Fit Round-neck T-shirt",
-    priceMin: 26,
-    priceMax: 29,
-    badge: null,
-    image: product5,
-    colors: ["black", "brown"],
-    soldOut: false,
-    category: "T-Shirt",
-  },
-  {
-    id: 6,
-    name: "Hooded Sweatshirt",
-    priceMin: 28,
-    priceMax: 28,
-    badge: "Hot",
-    image: product6,
-    colors: ["white"],
-    soldOut: false,
-    category: "Hoodie",
-  },
-  {
-    id: 7,
-    name: "Kids Hoodie",
-    priceMin: 26,
-    priceMax: 29,
-    badge: "New",
-    image: product1,
-    colors: ["yellow"],
-    soldOut: false,
-    category: "Kids",
-  },
-  {
-    id: 8,
-    name: "Lightweight Fashion Tee",
-    priceMin: 32,
-    priceMax: 32,
-    badge: null,
-    image: product2,
-    colors: ["black"],
-    soldOut: false,
-    category: "T-Shirt",
-  },
-  {
-    id: 9,
-    name: "Midweight Cotton Tee",
-    priceMin: 26,
-    priceMax: 29,
-    badge: null,
-    image: product3,
-    colors: ["brown"],
-    soldOut: false,
-    category: "T-Shirt",
-  },
-  {
-    id: 10,
-    name: "Premium Crewneck Sweatshirt",
-    priceMin: 29,
-    priceMax: 29,
-    badge: "Sold out",
-    image: product4,
-    colors: ["black"],
-    soldOut: true,
-    category: "Sweater",
-  },
-  {
-    id: 11,
-    name: "Premium Pullover Hoodie",
-    priceMin: 26,
-    priceMax: 29,
-    badge: "New",
-    image: product5,
-    colors: ["lilac"],
-    soldOut: false,
-    category: "Hoodie",
-  },
-  {
-    id: 12,
-    name: "Product Price by Options",
-    priceMin: 26,
-    priceMax: 29,
-    badge: "New",
-    image: product6,
-    colors: ["gray"],
-    soldOut: false,
-    category: "Product Designer",
+    image: news4,
+    tags: ["Print Company"],
+    title: "The best custom T-shirt designer WordPress theme",
+    author: "admin",
+    date: "August 20, 2022",
   },
 ];
 
-function Price({ min, max }) {
-  if (min === max) return <>${min.toFixed(2)}</>;
-  return <>${min.toFixed(2)} — ${max.toFixed(2)}</>;
-}
+export default function BlogSection() {
+  // Apply custom classes after Swiper mounts (ensures custom buttons work)
+  useEffect(() => {
+    const prevEl = document.querySelector(".custom-prev");
+    const nextEl = document.querySelector(".custom-next");
 
-function ColorDot({ color }) {
-  // maps simple color keywords to Tailwind bg classes
-  const map = {
-    black: "bg-black",
-    white: "bg-white border",
-    brown: "bg-amber-700",
-    yellow: "bg-yellow-300",
-    blue: "bg-blue-400",
-    gray: "bg-gray-300",
-    lilac: "bg-violet-300",
-  };
-  const cls = map[color] || "bg-gray-400";
-  return <span className={`w-3 h-3 rounded-full ${cls} inline-block mr-1`}></span>;
-}
+    // Fix for Swiper 9+ where navigation elements need manual assignment
+    const swiperEls = document.querySelectorAll(".swiper");
+    swiperEls.forEach((swiperEl) => {
+      if (swiperEl.swiper) {
+        swiperEl.swiper.params.navigation.prevEl = prevEl;
+        swiperEl.swiper.params.navigation.nextEl = nextEl;
+        swiperEl.swiper.navigation.init();
+        swiperEl.swiper.navigation.update();
+      }
+    });
+  }, []);
 
-function ProductCard({ product }) {
   return (
-    <article className="border rounded-2xl p-4 shadow-sm hover:shadow-lg transition group bg-white relative">
-      {/* Badge */}
-      {product.badge && (
-        <span
-          className={`absolute top-3 left-3 text-xs px-2 py-1 rounded-full ${
-            product.badge === "Sale"
-              ? "bg-green-500 text-white"
-              : product.badge === "New"
-              ? "bg-indigo-500 text-white"
-              : product.badge === "Hot"
-              ? "bg-orange-400 text-white"
-              : product.badge === "Sold out"
-              ? "bg-gray-700 text-white"
-              : "bg-gray-200"
-          }`}
+    <section className="py-16 relative">
+      <div className="container mx-auto px-4 md:px-20">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="md:text-4xl text-xl font-bold text-gray-900">Most recent news</h2>
+          <a
+            href="#"
+            className="flex items-center bg-white gap-2 text-sm font-medium text-gray-800 hover:text-white shadow-xl border-gray-200 border p-3 rounded-xl hover:bg-red-500 transition-all duration-300"
+          >
+            View All News →
+          </a>
+        </div>
+
+        {/* Custom navigation buttons */}
+        <div className="absolute left-4 2xl:left-40 top-1/2 -translate-y-1/2 z-10">
+          <button className="custom-prev w-12 h-12 bg-white border border-gray-200 shadow-md rounded-full flex items-center justify-center text-gray-700 hover:bg-red-500 hover:text-white transition">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="absolute right-4 2xl:right-40 top-1/2 -translate-y-1/2 z-10">
+          <button className="custom-next w-12 h-12 bg-white border border-gray-200 shadow-md rounded-full flex items-center justify-center text-gray-700 hover:bg-red-500 hover:text-white transition">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        <Swiper
+          modules={[Navigation]}
+          navigation={{
+            prevEl: ".custom-prev",
+            nextEl: ".custom-next",
+          }}
+          spaceBetween={30}
+          slidesPerView={1}
+          breakpoints={{
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          className="pb-10"
         >
-          {product.badge}
-        </span>
-      )}
-
-      {/* Image */}
-      <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-100 mb-4 flex items-center justify-center">
-        {/* HTML <img> used here for simplicity — you may swap to next/image if desired */}
-        <img
-          src={product.image.src}
-          alt={product.name}
-          className="object-cover w-full h-full"
-        />
-
-        {/* Hover icons */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-end justify-center opacity-0 group-hover:opacity-100">
-          <div className="mb-4 flex gap-2">
-            <button
-              aria-label="Add to wishlist"
-              className="bg-white w-9 h-9 rounded-full flex items-center justify-center shadow hover:scale-105 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M12 21s-7-4.35-9.5-7.5C-1 8 6 3 12 8c6-5 13 0 9.5 5.5C19 16.65 12 21 12 21z" fill="#111827" />
-              </svg>
-            </button>
-            <button
-              aria-label="Quick view"
-              className="bg-white w-9 h-9 rounded-full flex items-center justify-center shadow hover:scale-105 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M12 5c-7 0-11 6-11 7s4 7 11 7 11-6 11-7-4-7-11-7zm0 11a4 4 0 110-8 4 4 0 010 8z" fill="#111827" />
-              </svg>
-            </button>
-            <button
-              aria-label="Compare"
-              className="bg-white w-9 h-9 rounded-full flex items-center justify-center shadow hover:scale-105 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M10 3H5a2 2 0 00-2 2v5" stroke="#111827" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M14 21h5a2 2 0 002-2v-5" stroke="#111827" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M21 7L9 19" stroke="#111827" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Sold out overlay */}
-        {product.soldOut && (
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="text-white font-semibold bg-black/60 px-4 py-2 rounded-full">Sold out</span>
-          </div>
-        )}
-      </div>
-
-      {/* Info */}
-      <h3 className="font-medium text-sm mb-1">{product.name}</h3>
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-700">
-          <Price min={product.priceMin} max={product.priceMax} />
-        </div>
-        <div className="text-xs text-gray-500"> • {product.colors.length}+</div>
-      </div>
-
-      {/* Color dots */}
-      <div className="mt-3">
-        {product.colors.map((c, idx) => (
-          <ColorDot key={idx} color={c} />
-        ))}
-      </div>
-    </article>
-  );
-}
-
-export default function ShopPage() {
-  const [openMobileFilters, setOpenMobileFilters] = useState(false);
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [priceMax, setPriceMax] = useState(150);
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 9;
-
-  // categories example
-  const categories = [
-    "Hoodie",
-    "Kids",
-    "Long Sleeves",
-    "Product Designer",
-    "Sweater",
-    "T-Shirt",
-  ];
-
-  // color options
-  const colorOptions = ["black", "brown", "white", "yellow", "blue", "gray", "lilac"];
-
-  // client-side filtered products
-  const filtered = useMemo(() => {
-    let list = SAMPLE_PRODUCTS.slice();
-
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
-      list = list.filter((p) => p.name.toLowerCase().includes(q));
-    }
-
-    if (selectedCategory) {
-      // Improved category filtering using actual category field
-      list = list.filter((p) => p.category === selectedCategory);
-    }
-
-    if (selectedColors.length) {
-      list = list.filter((p) => p.colors.some((c) => selectedColors.includes(c)));
-    }
-
-    list = list.filter((p) => p.priceMin <= priceMax);
-
-    return list;
-  }, [search, selectedCategory, selectedColors, priceMax]);
-
-  const total = filtered.length;
-  const pages = Math.max(1, Math.ceil(total / perPage));
-  const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
-
-  function toggleColor(c) {
-    setSelectedColors((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
-  }
-
-  function resetFilters() {
-    setSearch("");
-    setSelectedCategory(null);
-    setSelectedColors([]);
-    setPriceMax(150);
-    setCurrentPage(1);
-  }
-
-  return (
-    <div className="bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-semibold">Shop</h1>
-          <p className="text-sm text-gray-500 mt-1">Home — Shop</p>
-        </div>
-
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setOpenMobileFilters(true)}
-              className="lg:hidden inline-flex items-center gap-2 px-3 py-2 border rounded-lg text-sm"
-            >
-              Filters
-            </button>
-            <p className="text-sm text-gray-600 hidden sm:block">Showing {Math.min(total, perPage)} of {total} results</p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <select
-              className="border rounded-lg px-3 py-2 text-sm"
-              aria-label="Sort products"
-            >
-              <option>Default sorting</option>
-              <option>Latest</option>
-              <option>Price: low to high</option>
-              <option>Price: high to low</option>
-            </select>
-
-            <div className="hidden md:flex gap-2 items-center">
-              <button className="p-2 border rounded-md" title="Grid view (default)">▦</button>
-              <button className="p-2 border rounded-md" title="List view">≡</button>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-12 gap-8">
-          {/* Sidebar (desktop) */}
-          <aside className="col-span-3 hidden lg:block">
-            <div className="space-y-8">
-              {/* Search */}
-              <div>
-                <label htmlFor="search" className="block text-sm font-medium text-gray-700">Search</label>
-                <div className="mt-2 relative">
-                  <input
-                    id="search"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search products..."
-                    className="w-full border rounded-lg px-3 py-2 text-sm"
+          {blogPosts.map((post) => (
+            <SwiperSlide key={post.id}>
+              <div className="bg-white rounded-xl overflow-hidden shadow-md my-3 hover:shadow-2xl transition-shadow duration-300">
+                <div className="relative h-64 w-full">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover"
                   />
                 </div>
-              </div>
-
-              {/* Categories */}
-              <div>
-                <h4 className="font-semibold mb-3">Product categories</h4>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li>
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`text-left w-full ${selectedCategory === null ? "font-semibold" : "text-gray-600"}`}
-                    >
-                      All
-                    </button>
-                  </li>
-                  {categories.map((c) => (
-                    <li key={c}>
-                      <button
-                        onClick={() => setSelectedCategory(c)}
-                        className={`text-left w-full ${selectedCategory === c ? "font-semibold" : "text-gray-600"}`}
+                <div className="p-6">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {post.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="bg-red-100 text-red-700 text-xs font-medium px-3 py-1 rounded-full"
                       >
-                        {c}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Price */}
-              <div>
-                <h4 className="font-semibold mb-3">Filter by price</h4>
-                <input
-                  type="range"
-                  min={10}
-                  max={150}
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(Number(e.target.value))}
-                  className="w-full accent-black"
-                />
-                <div className="text-sm text-gray-600 mt-2">Price: $10 — ${priceMax}</div>
-              </div>
-
-              {/* Color */}
-              <div>
-                <h4 className="font-semibold mb-3">Filter by Color</h4>
-                <div className="flex flex-wrap gap-2">
-                  {colorOptions.map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => toggleColor(c)}
-                      className={`flex items-center gap-2 px-2 py-1 border rounded-md text-sm ${selectedColors.includes(c) ? "bg-gray-100" : ""}`}
-                    >
-                      <span className="w-4 h-4 rounded-full" style={{ background: colorCss(c) }} />
-                      <span className="capitalize">{c}</span>
-                    </button>
-                  ))}
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="text-lg h-14 font-semibold text-gray-900 mb-4 hover:text-red-600 cursor-pointer">
+                    {post.title}
+                  </h3>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2">
+                      👤
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-700">by {post.author}</p>
+                      <p>{post.date}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <div>
-                <button onClick={resetFilters} className="text-sm text-gray-600 underline">Reset Filters</button>
-              </div>
-            </div>
-          </aside>
-
-          {/* Main */}
-          <main className="col-span-12 lg:col-span-9">
-            {paginated.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500">No products found. Try adjusting your filters.</p>
-                <button onClick={resetFilters} className="mt-4 text-sm text-black underline">
-                  Reset all filters
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {paginated.map((p) => (
-                    <ProductCard key={p.id} product={p} />
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                <div className="flex justify-center mt-10">
-                  <nav className="inline-flex gap-2 items-center">
-                    <button
-                      onClick={() => setCurrentPage((s) => Math.max(1, s - 1))}
-                      disabled={currentPage === 1}
-                      className="px-3 py-2 border rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      ‹
-                    </button>
-
-                    {Array.from({ length: pages }).map((_, i) => {
-                      const pageNum = i + 1;
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => setCurrentPage(pageNum)}
-                          className={`w-9 h-9 rounded-full flex items-center justify-center ${currentPage === pageNum ? "bg-black text-white" : "border"}`}
-                          aria-current={currentPage === pageNum ? "page" : undefined}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    })}
-
-                    <button
-                      onClick={() => setCurrentPage((s) => Math.min(pages, s + 1))}
-                      disabled={currentPage === pages}
-                      className="px-3 py-2 border rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      ›
-                    </button>
-                  </nav>
-                </div>
-              </>
-            )}
-          </main>
-        </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
-
-      {/* Mobile Filter Drawer */}
-      {openMobileFilters && (
-        <div className="fixed inset-0 z-50">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setOpenMobileFilters(false)}
-          />
-          <div className="absolute right-0 top-0 bottom-0 w-80 bg-white p-4 overflow-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium">Filters</h3>
-              <button onClick={() => setOpenMobileFilters(false)} className="text-sm text-gray-600">Close</button>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Search</label>
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 mt-2"
-                />
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Category</h4>
-                <select
-                  value={selectedCategory ?? ""}
-                  onChange={(e) => setSelectedCategory(e.target.value || null)}
-                  className="w-full border rounded-lg px-3 py-2"
-                >
-                  <option value="">All</option>
-                  {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Price</h4>
-                <input
-                  type="range"
-                  min={10}
-                  max={150}
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(Number(e.target.value))}
-                  className="w-full accent-black"
-                />
-                <div className="text-sm text-gray-600 mt-2">Max: ${priceMax}</div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Colors</h4>
-                <div className="flex flex-wrap gap-2">
-                  {colorOptions.map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => toggleColor(c)}
-                      className={`flex items-center gap-2 px-2 py-1 border rounded-md ${selectedColors.includes(c) ? "bg-gray-100" : ""}`}
-                    >
-                      <span className="w-4 h-4 rounded-full" style={{ background: colorCss(c) }} />
-                      <span className="capitalize">{c}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button onClick={() => { resetFilters(); setOpenMobileFilters(false); }} className="flex-1 border rounded-md px-4 py-2">Reset</button>
-                <button onClick={() => setOpenMobileFilters(false)} className="flex-1 bg-black text-white rounded-md px-4 py-2">Apply</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    </section>
   );
 }

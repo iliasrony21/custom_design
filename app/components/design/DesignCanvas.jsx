@@ -6,6 +6,8 @@ import { ZoomIn } from "lucide-react";
 import front_side from "@/public/front.jpg";
 import back_side from "@/public/back_side.webp";
 import UploadedImage from "./UploadedImage";
+import UploadedText from "./UploadedText";
+import UploadedArtText from "./UploadedArtText";
 
 const DesignCanvas = forwardRef(({
   view,
@@ -17,11 +19,36 @@ const DesignCanvas = forwardRef(({
   onResize,
   onRotate,
   onRemoveUpload,
+  onDeselectImage,
+  // Text Props
+  uploadedTexts,
+  selectedTextForEditing,
+  onTextClick,
+  onTextDrag,
+  onTextResize,
+  onTextRotate,
+  onRemoveText,
+  onDeselectText,
+  onDuplicateText,
+  getTextPath,
+  // Art Text Props
+  uploadedArtTexts,
+  selectedArtTextForEditing,
+  onArtTextClick,
+  onArtTextDrag,
+  onArtTextResize,
+  onArtTextRotate,
+  onRemoveArtText,
+  onDeselectArtText,
+  onDuplicateArtText,
+  getArtTextPath,
 }, ref) => {
   const canvasRef = useRef(null);
   const [canvasSize, setCanvasSize] = useState({ width: 400, height: 400 });
   
   const currentUploadedImages = uploadedImages[view];
+  const currentUploadedTexts = uploadedTexts[view];
+  const currentUploadedArtTexts = uploadedArtTexts[view];
   const productImage = view === "back" ? back_side : front_side;
 
   // Update canvas size when component mounts/resizes
@@ -33,8 +60,6 @@ const DesignCanvas = forwardRef(({
           width: rect.width,
           height: rect.height
         });
-        
-        console.log("Canvas size:", rect.width, rect.height);
       }
     };
 
@@ -51,6 +76,14 @@ const DesignCanvas = forwardRef(({
     }
   }, [ref]);
 
+  // Handle canvas click to deselect items
+  const handleCanvasClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onDeselectImage();
+      onDeselectText();
+    }
+  };
+
   return (
     <section className="flex-1 flex flex-col items-center justify-center relative">
       {/* Main Product Image */}
@@ -66,6 +99,7 @@ const DesignCanvas = forwardRef(({
         <div
           ref={canvasRef}
           className="absolute top-5 right-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[550px] h-[50%] max-h-[400px] border-2 border-dashed border-gray-300 rounded-xl overflow-hidden bg-white/5"
+          onClick={handleCanvasClick}
         >
           {/* Canvas content area */}
           <div 
@@ -74,9 +108,11 @@ const DesignCanvas = forwardRef(({
               width: '100%',
               height: '100%',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              cursor: 'default'
             }}
           >
+            {/* Render uploaded images */}
             {currentUploadedImages.map((image) => (
               <UploadedImage
                 key={image.id}
@@ -89,6 +125,41 @@ const DesignCanvas = forwardRef(({
                 onClick={onImageClick}
                 canvasRef={canvasRef}
                 canvasSize={canvasSize}
+              />
+            ))}
+
+            {/* Render uploaded texts */}
+            {currentUploadedTexts.map((text) => (
+              <UploadedText
+                key={text.id}
+                text={text}
+                isSelected={selectedTextForEditing?.id === text.id}
+                onDrag={onTextDrag}
+                onResize={onTextResize}
+                onRotate={onTextRotate}
+                onRemove={onRemoveText}
+                onClick={onTextClick}
+                canvasRef={canvasRef}
+                canvasSize={canvasSize}
+                onDuplicate={onDuplicateText}
+                getTextPath={getTextPath} // ADD THIS PROP
+              />
+            ))}
+            {/* Render uploaded Art texts */}
+            {currentUploadedArtTexts.map((text) => (
+              <UploadedArtText
+                key={text.id}
+                text={text}
+                isSelected={selectedArtTextForEditing?.id === text.id}
+                onDrag={onArtTextDrag}
+                onResize={onArtTextResize}
+                onRotate={onArtTextRotate}
+                onRemove={onRemoveArtText}
+                onClick={onArtTextClick}
+                canvasRef={canvasRef}
+                canvasSize={canvasSize}
+                onDuplicate={onDuplicateArtText}
+                getTextPath={getArtTextPath} // ADD THIS PROP
               />
             ))}
           </div>

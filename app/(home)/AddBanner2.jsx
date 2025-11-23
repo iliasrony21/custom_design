@@ -1,5 +1,6 @@
 import Image from "next/image";
 import banner_bg from "../../public/bannerbg.png";
+import Link from "next/link";
 
 export default function AddBanner2() {
   return (
@@ -16,9 +17,9 @@ export default function AddBanner2() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-            <button className="bg-white text-red-600 font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-yellow-300 hover:text-red-700 transition-all duration-300">
+            <Link href={'/shopPage'} className="bg-white text-red-600 font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-yellow-300 hover:text-red-700 transition-all duration-300">
               Shop Now →
-            </button>
+            </Link>
             <button className="bg-transparent border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-red-600 transition-all duration-300">
               Contact Us →
             </button>

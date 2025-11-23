@@ -1,111 +1,259 @@
 "use client";
 
-import { useState } from "react";
-import { ShoppingBag, User, Star, ChevronDown, Menu, X, Plus, Minus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  ShoppingBag,
+  User,
+  Star,
+  ChevronDown,
+  Menu,
+  X,
+  Plus,
+  Minus,
+} from "lucide-react";
 import Image from "next/image";
-import logo from '@/public/logo.png';
+import logo from "@/public/logo.png";
 
 import TopBar from "./TopBar";
+import Link from "next/link";
 
 export default function Header() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState([]);
 
-  const handleHover = (menu) => setActiveMenu(menu);
-  const handleLeave = () => setActiveMenu(null);
+  // --- for smooth close delay ---
+  const closeTimerRef = useRef(null);
+
+  const handleHover = (menu) => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    setActiveMenu(menu);
+  };
+
+  const handleLeave = () => {
+    closeTimerRef.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 180); // small delay for smooth UX
+  };
+
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const toggleExpandedItem = (itemName) => {
-    setExpandedItems(prev => 
-      prev.includes(itemName) 
-        ? prev.filter(item => item !== itemName)
+    setExpandedItems((prev) =>
+      prev.includes(itemName)
+        ? prev.filter((item) => item !== itemName)
         : [...prev, itemName]
     );
   };
 
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
   const dropdowns = {
-    Collections: (
-      <div className="grid grid-cols-3 gap-6">
-        <div>
-          <h4 className="font-semibold mb-3">Featured</h4>
-          <ul className="space-y-2">
-            <li>
-              <a href="#" className="hover:text-red-500">
-                New Arrivals
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-red-500">
-                Best Sellers
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-red-500">
-                Limited Edition
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-3">Collections</h4>
-          <ul className="space-y-2">
-            <li>
-              <a href="#" className="hover:text-red-500">
-                T-Shirts
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-red-500">
-                Hoodies
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-red-500">
-                Accessories
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="bg-gradient-to-r from-red-400 to-red-600
+    // Collections: (
+    //   <div className="grid grid-cols-3 gap-6">
+    //     <div>
+    //       <h4 className="font-semibold mb-3">Featured</h4>
+    //       <ul className="space-y-2">
+    //         <li><a href="#" className="hover:text-red-500">New Arrivals</a></li>
+    //         <li><a href="#" className="hover:text-red-500">Best Sellers</a></li>
+    //         <li><a href="#" className="hover:text-red-500">Limited Edition</a></li>
+    //       </ul>
+    //     </div>
+    //     <div>
+    //       <h4 className="font-semibold mb-3">Collections</h4>
+    //       <ul className="space-y-2">
+    //         <li><a href="#" className="hover:text-red-500">T-Shirts</a></li>
+    //         <li><a href="#" className="hover:text-red-500">Hoodies</a></li>
+    //         <li><a href="#" className="hover:text-red-500">Accessories</a></li>
+    //       </ul>
+    //     </div>
+    //     <div className="bg-gradient-to-r from-red-400 to-red-600 rounded-lg p-6 text-white">
+    //       <h4 className="font-bold mb-2">New Season Drop</h4>
+    //       <p className="text-sm mb-3">Up to 30% off</p>
+    //       <button className="bg-white text-red-600 px-3 py-1 rounded">
+    //         Shop Now
+    //       </button>
+    //     </div>
+    //   </div>
+    // ),
 
-
-
- rounded-lg p-6 text-white">
-          <h4 className="font-bold mb-2">New Season Drop</h4>
-          <p className="text-sm mb-3">Up to 30% off</p>
-          <button className="bg-white text-red-600 px-3 py-1 rounded">
-            Shop Now
-          </button>
-        </div>
-      </div>
-    ),
     Shop: (
-      <div className="grid grid-cols-4 gap-6">
-        {["Men", "Women", "Kids", "Accessories"].map((section) => (
-          <div key={section}>
-            <h4 className="font-semibold mb-3">{section}</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-red-500">
-                  T-Shirts
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-red-500">
-                  Jeans
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-red-500">
-                  Shoes
-                </a>
-              </li>
-            </ul>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_1fr_420px] gap-10 lg:gap-14">
+        {/* Column 1 */}
+        <div>
+          <h3 className="text-xl font-extrabold tracking-wide uppercase mb-6">
+            Shop Layout
+          </h3>
+          <ul className="space-y-4 text-[17px]">
+            <li>
+              <a
+                href="#"
+                className="text-emerald-500 font-medium hover:text-red-500"
+              >
+                Shop Grid Default
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Shop Grid 5 Columns
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Shop List
+              </a>
+            </li>
+
+            <li className="flex items-center gap-2">
+              <a href="#" className="hover:text-red-500">
+                Hidden Sidebar Fixed
+              </a>
+              <span className="text-[11px] font-semibold bg-emerald-500 text-white px-2 py-[2px] rounded">
+                New
+              </span>
+            </li>
+
+            <li className="flex items-center gap-2">
+              <a href="#" className="hover:text-red-500">
+                Hidden Sidebar Toggle
+              </a>
+              <span className="text-[11px] font-semibold bg-emerald-500 text-white px-2 py-[2px] rounded">
+                New
+              </span>
+            </li>
+
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Product Hover Style 1
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Product Hover Style 2
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 2 */}
+        <div>
+          <h3 className="text-xl font-extrabold tracking-wide uppercase mb-6">
+            Product Layout
+          </h3>
+          <ul className="space-y-4 text-[17px]">
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Simple Product
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Variable Product
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Horizontal Slide
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Vertical Slide
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Vertical Slide (Sticky)
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Vertical Gallery
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Grid Gallery
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 3 */}
+        <div>
+          <h3 className="text-xl font-extrabold tracking-wide uppercase mb-6">
+            Woo Pages
+          </h3>
+          <ul className="space-y-4 text-[17px]">
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Shop
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Cart
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                My account
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Checkout
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Wishlist
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                Order Tracking
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                My Designs
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Right Promo Banner */}
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-100 via-purple-100 to-pink-100 min-h-[280px] flex items-center">
+          <img
+            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop"
+            alt="Promo"
+            className="absolute inset-0 w-full h-full object-cover opacity-60"
+          />
+          <div className="relative z-10 p-8">
+            <span className="inline-block bg-violet-500 text-white text-sm font-semibold px-4 py-1 rounded-md mb-4">
+              From $13
+            </span>
+
+            <h2 className="text-4xl font-extrabold leading-tight mb-3">
+              25% off <br /> everything
+            </h2>
+
+            <p className="text-lg mb-6">Design your own!</p>
+
+            <button className="bg-white text-black font-semibold px-8 py-4 rounded-xl shadow hover:shadow-md transition inline-flex items-center gap-3">
+              Shop Now <span className="text-xl">→</span>
+            </button>
           </div>
-        ))}
+        </div>
       </div>
     ),
+
     Pages: (
       <ul className="space-y-2">
         <li>
@@ -127,55 +275,50 @@ export default function Header() {
     ),
   };
 
-  // Mobile menu items - simplified version without complex dropdowns
   const mobileMenuItems = [
-    { name: "Home", href: "#" },
-    { 
-      name: "Collections", 
-      href: "#",
-      subItems: [
-        { name: "New Arrivals", href: "#" },
-        { name: "Best Sellers", href: "#" },
-        { name: "Limited Edition", href: "#" },
-        { name: "T-Shirts", href: "#" },
-        { name: "Hoodies", href: "#" },
-        { name: "Accessories", href: "#" }
-      ]
-    },
-    { 
-      name: "Shop", 
+    { name: "Home", href: "/" },
+    // {
+    //   name: "Collections",
+    //   href: "#",
+    //   subItems: [
+    //     { name: "New Arrivals", href: "#" },
+    //     { name: "Best Sellers", href: "#" },
+    //     { name: "Limited Edition", href: "#" },
+    //     { name: "T-Shirts", href: "#" },
+    //     { name: "Hoodies", href: "#" },
+    //     { name: "Accessories", href: "#" },
+    //   ],
+    // },
+    { name: "Collections", href: "#" },
+    {
+      name: "Shop",
       href: "#",
       subItems: [
         { name: "Men", href: "#" },
         { name: "Women", href: "#" },
         { name: "Kids", href: "#" },
-        { name: "Accessories", href: "#" }
-      ]
+        { name: "Accessories", href: "#" },
+      ],
     },
     { name: "Blog", href: "#" },
-    { 
-      name: "Pages", 
+    {
+      name: "Pages",
       href: "#",
       subItems: [
         { name: "About Us", href: "#" },
         { name: "Contact", href: "#" },
-        { name: "FAQ", href: "#" }
-      ]
+        { name: "FAQ", href: "#" },
+      ],
     },
   ];
 
   return (
     <header className="relative sticky top-0 z-50 bg-white">
-      {/* Topbar */}
       <TopBar />
 
-      {/* Main Header */}
       <div className="flex items-center justify-between px-0 md:px-10 relative">
         {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden p-2"
-          onClick={toggleMobileMenu}
-        >
+        <button className="md:hidden p-2" onClick={toggleMobileMenu}>
           <Menu className="w-6 h-6" />
         </button>
 
@@ -188,21 +331,31 @@ export default function Header() {
               onMouseEnter={() => handleHover(item)}
               onMouseLeave={handleLeave}
             >
-              <button className="flex items-center gap-1 font-medium hover:text-red-500 transition cursor-pointer">
+              {/* <button className="flex items-center gap-1 font-medium hover:text-red-500 transition cursor-pointer">
                 {item}
-                {dropdowns[item] && (
-                  <ChevronDown className="w-4 h-4 mt-[2px]" />
-                )}
-              </button>
+                {dropdowns[item] && <ChevronDown className="w-4 h-4 mt-[2px]" />}
+              </button> */}
+              <Link href={item === "Home" ? "/" : `/${item.toLowerCase()}`}>
+                <div className="flex items-center gap-1 font-medium hover:text-red-500 transition cursor-pointer">
+                  {item}
+                  {dropdowns[item] && (
+                    <ChevronDown className="w-4 h-4 mt-[2px]" />
+                  )}
+                </div>
+              </Link>
 
-              {/* Small dropdown (for Pages only) */}
+              {/* Pages small dropdown (SMOOTH) */}
               {item === "Pages" && (
                 <div
-                  className={`absolute left-0 top-full w-52 bg-white shadow-lg rounded-2xl transition-opacity transition-transform duration-700 ease-out transform origin-top z-50 ${
-                    activeMenu === "Pages"
-                      ? "opacity-100 scale-100 translate-y-0 visible"
-                      : "opacity-0 scale-95 -translate-y-0 invisible"
-                  }`}
+                  className={`
+                    absolute left-0 top-full w-52 bg-white shadow-lg rounded-2xl z-50 origin-top
+                    transition-all duration-500 ease-out
+                    ${
+                      activeMenu === "Pages"
+                        ? "opacity-100 translate-y-0 scale-100 pointer-events-auto visible"
+                        : "opacity-0 -translate-y-2 scale-95 pointer-events-none invisible"
+                    }
+                  `}
                 >
                   <div className="p-4">{dropdowns.Pages}</div>
                 </div>
@@ -213,7 +366,9 @@ export default function Header() {
 
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <Image src={logo} alt="Logo" width={150} height={50} />
+          <Link href="/">
+            <Image src={logo} alt="Logo" width={150} height={50} />
+          </Link>
         </div>
 
         {/* Icons */}
@@ -231,20 +386,23 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Global Dropdown (Collections + Shop) - Desktop */}
-        {["Collections", "Shop"].includes(activeMenu) && (
-          <div
-            onMouseEnter={() => handleHover(activeMenu)}
-            onMouseLeave={handleLeave}
-            className={`absolute left-1/2 -translate-x-1/2 top-full mt-0 w-[90vw] bg-white shadow-lg rounded-2xl transition-all duration-700 ease-in-out transform origin-top z-50 ${
-              activeMenu
-                ? "opacity-100 scale-100 translate-y-0 visible"
-                : "opacity-0 scale-95 -translate-y-2 invisible"
-            }`}
-          >
-            <div className="p-8">{dropdowns[activeMenu]}</div>
-          </div>
-        )}
+        {/* Global Dropdown  Shop - ALWAYS MOUNTED FOR SMOOTH ANIMATION */}
+        <div
+          onMouseEnter={() => handleHover(activeMenu)}
+          onMouseLeave={handleLeave}
+          className={`
+            absolute left-1/2 -translate-x-1/2 top-full mt-0 w-[90vw]
+            bg-white shadow-lg rounded-2xl z-50 origin-top
+            transition-all duration-700 ease-out
+            ${
+              ["Shop"].includes(activeMenu)
+                ? "opacity-100 translate-y-0 scale-100 pointer-events-auto visible"
+                : "opacity-0 -translate-y-3 scale-95 pointer-events-none invisible"
+            }
+          `}
+        >
+          <div className="p-8">{dropdowns[activeMenu]}</div>
+        </div>
       </div>
 
       {/* Mobile Menu Modal */}
@@ -254,10 +412,7 @@ export default function Header() {
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between p-4 border-b">
               <Image src={logo} alt="Logo" width={120} height={40} />
-              <button 
-                onClick={toggleMobileMenu}
-                className="p-2"
-              >
+              <button onClick={toggleMobileMenu} className="p-2">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -270,14 +425,14 @@ export default function Header() {
                     {item.subItems ? (
                       <div>
                         <div className="flex items-center justify-between font-medium text-lg mb-2">
-                          <a 
-                            href={item.href} 
+                          <a
+                            href={item.href}
                             className="hover:text-red-500"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {item.name}
                           </a>
-                          <button 
+                          <button
                             onClick={() => toggleExpandedItem(item.name)}
                             className="p-1 hover:text-red-500"
                           >
@@ -288,13 +443,13 @@ export default function Header() {
                             )}
                           </button>
                         </div>
-                        {/* Sub-items - hidden by default, shown when expanded */}
+
                         {expandedItems.includes(item.name) && (
                           <ul className="space-y-2 pl-4 mt-2">
                             {item.subItems.map((subItem) => (
                               <li key={subItem.name}>
-                                <a 
-                                  href={subItem.href} 
+                                <a
+                                  href={subItem.href}
                                   className="block py-2 text-gray-600 hover:text-red-500"
                                   onClick={() => setMobileMenuOpen(false)}
                                 >
@@ -306,8 +461,8 @@ export default function Header() {
                         )}
                       </div>
                     ) : (
-                      <a 
-                        href={item.href} 
+                      <a
+                        href={item.href}
                         className="block font-medium text-lg py-2 hover:text-red-500"
                         onClick={() => setMobileMenuOpen(false)}
                       >

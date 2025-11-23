@@ -1,11 +1,14 @@
 import Image from "next/image";
 import Price from "../Price";
 import ColorDot from "./ColorDots";
+import Link from "next/link";
 
 export default function ProductCard({ product}) {
   
   return (
      <article className=" rounded-2xl shadow-xl hover:shadow-lg transition group bg-white relative">
+      <Link href={'/details'}>
+      
        {/* Badge */}
        {product.badge && (
          <span
@@ -123,6 +126,7 @@ export default function ProductCard({ product}) {
            ))}
          </div>
        </div>
+       </Link>
      </article>
    );
 }

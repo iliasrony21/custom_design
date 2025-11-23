@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import arrow from "@/public/arrow.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -32,12 +33,12 @@ export default function HeroSection() {
 
           {/* Buttons */}
           <div className="flex items-center justify-center gap-4 mt-14">
-            <button className="bg-red-500 hover:bg-red-600 text-white font-medium px-8 py-3 rounded-xl transition">
+            <Link href={'/design/custom_design'} className="bg-red-500 hover:bg-red-600 text-white font-medium px-8 py-3 rounded-xl transition">
               Get Started
-            </button>
-            <button className="border border-gray-300 hover:border-gray-400 text-gray-700 font-medium px-8 py-3 rounded-xl transition">
-              Sign Up
-            </button>
+            </Link>
+            <Link href={'/join-as-partner'} className="border border-gray-300 hover:border-gray-400 text-gray-700 font-medium px-8 py-3 rounded-xl transition">
+              Join as Partner
+            </Link>
           </div>
 
           {/* Arrow Image */}

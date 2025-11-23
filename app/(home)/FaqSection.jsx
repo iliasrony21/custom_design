@@ -51,7 +51,7 @@ export default function FaqSection() {
 
   return (
     <div className="container mx-auto p-4 md:p-20 ">
-      <div className="px-6 sm:px-6 md:px-28 bg-white py-12  shadow-2xl rounded-2xl">
+      <div className="px-6 sm:px-6 md:px-28  py-12   rounded-2xl">
         {/* Header */}
 
         <div className="text-center mb-12">

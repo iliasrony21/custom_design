@@ -8,6 +8,7 @@ import six from "../../public/six.png";
 import seven from "../../public/seven.png";
 import middle from "../../public/middle.png";
 import companybg from "../../public/companybg.png";
+import Link from "next/link";
 
 export default function TrustedCompaniesSection() {
   return (
@@ -43,9 +44,9 @@ export default function TrustedCompaniesSection() {
           tetur duis nec fringilla det, consec...
         </p>
 
-        <button className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg text-sm md:text-base w-full md:w-auto">
+        <Link href={'/design/custom_design'} className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg text-sm md:text-base w-full md:w-auto">
           Get Started
-        </button>
+        </Link>
       </div>
 
       {/* Right Logos Section - Mobile Optimized */}

@@ -14,9 +14,10 @@ export default function CustomDesign() {
   const image = useImageEditor();
   const addText = useAddTextEditor();
   const artText = useArtTextEditor();
-
+ const [selectedArtTextForEditing, setSelectedArtTextForEditing] = useState(null);
   // active panel 
     const [activeIndex, setActiveIndex] = useState(null);
+    const [artModalStep, setArtModalStep] = useState("categories");
 
    const handleSidebarButtonClick = (index) => {
     setActiveIndex(index);
@@ -51,6 +52,28 @@ export default function CustomDesign() {
     // prepare upload mode
     image.setUploadMode(true);
     image.setSelectedImageForEditing(null);
+  };
+
+  const handleUpdateSize = (key, value) => {
+  console.log(`Updating size for ${key}: ${value}`);
+  if (key === "width") selectedArtTextForEditing.width = value;
+  if (key === "height") selectedArtTextForEditing.height = value;
+  
+  // If the function is passed as a prop (or defined in parent), call it
+  if (onUpdateSize) {
+    onUpdateSize(key, value); // Call onUpdateSize passed down as a prop
+  }
+};
+
+    const handleLayerUp = (selectedArtText) => {
+    // Logic for moving the art/text to the top layer or front in the canvas stack
+    console.log("Move to top layer: ", selectedArtText);
+    // Assuming you have an array of art elements, you can modify the position of selectedArtText in that array
+  };
+    const handleLayerDown = (selectedArtText) => {
+    // Logic for moving the art/text to the top layer or front in the canvas stack
+    console.log("Move to top layer: ", selectedArtText);
+    // Assuming you have an array of art elements, you can modify the position of selectedArtText in that array
   };
 
   const handleTextButtonClickEnhanced = () => {
@@ -120,6 +143,22 @@ export default function CustomDesign() {
     setShowArtPanel(false);
     artText.setSelectedArtTextForEditing(null);
   };
+
+  const handleCenter = () => {
+  // Logic for centering the art text or image
+  console.log('Centering the art');
+};
+
+const handleFlipX = () => {
+  // Logic for flipping art horizontally
+  console.log('Flipping art horizontally');
+};
+
+const handleFlipY = () => {
+  // Logic for flipping art vertically
+  console.log('Flipping art vertically');
+};
+
 
   // ---------- Pass props to MainPanel ----------
   // For backwards compatibility with your current MainPanel prop API, we pass
@@ -276,55 +315,7 @@ export default function CustomDesign() {
         handleTextAlignChange={addText.handleTextAlignChange}
         handleVerticalAlignChange={addText.handleVerticalAlignChange}
         /* ----------------- Art-Text props (new, from artText namespace) ----------------- */
-        // artText={artText} // pass the whole namespace if you want components to use it
-        // showArtTextPanel={artText.showArtTextPanel}
-        // uploadedArtTexts={artText.uploadedArtTexts}
-        // selectedArtTextForEditing={artText.selectedArtTextForEditing}
-        // artTextMode={artText.artTextMode}
-        // inputArtText={artText.inputArtText}
-        // artFont={artText.font}
-        // artColor={artText.color}
-        // artOutline={artText.outline}
-        // artShape={artText.shape}
-        // artTextSize={artText.textSize}
-        // artRotation={artText.rotation}
-        // artFlipX={artText.flipX}
-        // artFlipY={artText.flipY}
-        // artTextAlign={artText.textAlign}
-        // artTextVerticalAlign={artText.textVerticalAlign}
-        // onShowArtTextPanelChange={artText.setShowArtTextPanel}
-        // onAddArtText={artText.handleAddText}
-        // onUpdateArtTextProperty={artText.updateArtTextInRealTime}
-        // setArtInputText={artText.setInputText}
-        // setArtFont={artText.setFont}
-        // setArtColor={artText.setColor}
-        // setArtOutline={artText.setOutline}
-        // setArtShape={artText.setShape}
-        // setArtTextSize={artText.setTextSize}
-        // setArtRotation={artText.setRotation}
-        // setArtFlipX={artText.setFlipX}
-        // setArtFlipY={artText.setFlipY}
-        // onArtFontSelect={artText.handleFontSelect}
-        // onArtColorSelect={artText.handleColorSelect}
-        // onArtOutlineSelect={artText.handleOutlineSelect}
-        // onArtShapeSelect={artText.handleShapeSelect}
-        // onDuplicateArtText={artText.handleDuplicateArtText}
-        // onCenterArtText={artText.centerText}
-        // onResetArtTextToDefault={artText.resetTextToDefault}
-        // showArtPanel={showArtPanel}
-        // setShowArtPanel={setShowArtPanel}
-        // onCloseArtPanel={handleCloseArtPanel}
-        // // Pass the art modal state and functions here
-        // showArtCategories={showArtCategories}
-        // setShowArtCategories={setShowArtCategories}
-        // showArtSubcategories={showArtSubcategories}
-        // setShowArtSubcategories={setShowArtSubcategories}
-        // showEmojiPicker={showEmojiPicker}
-        // setShowEmojiPicker={setShowEmojiPicker}
-        // selectedCategory={selectedCategory}
-        // selectedSubcategory={selectedSubcategory}
-        // setSelectedCategory={setSelectedCategory}
-        // setSelectedSubcategory={setSelectedSubcategory}
+       
 
         showArtPanel={showArtPanel}
         showArtCategories={showArtCategories}
@@ -340,10 +331,29 @@ export default function CustomDesign() {
         //  showArtPanel={showArtPanel}
         setShowArtPanel={setShowArtPanel} // Pass this as a prop
         setActiveIndex={setActiveIndex}
+        handleAddEmoji={artText.handleAddEmoji}
+        uploadedArtTexts={artText.uploadedArtTexts}
+    selectedArtTextForEditing={artText.selectedArtTextForEditing}
+     onArtTextClick={artText.handleTextClick}
+  onArtTextDrag={artText.handleArtTextDrag}
+  onArtTextResize={artText.handleArtTextResize}
+  onArtTextRotate={artText.handleArtTextRotate}
+  onRemoveArtText={artText.handleRemoveArtText}
+  onDuplicateArtText={artText.handleDuplicateArtText}
+  getArtTextPath={artText.getTextPath}
+  artModalStep={artModalStep}   // ⬅⬅ ADD THIS LINE
+  setArtModalStep={setArtModalStep}
+ onLayerUp={handleLayerUp}
+ onLayerDown={handleLayerDown}
+
+
+      setSelectedArtTextForEditing={setSelectedArtTextForEditing} // Ensure this is passed down
+    onUpdateSize={handleUpdateSize}
+
       />
 
       {/* ---------- Canvas: pass namespaced objects and compatibility props ---------- */}
-      <DesignCanvas
+      {/* <DesignCanvas
         ref={image.canvasRef}
         view={image.view}
         uploadedImages={image.uploadedImages}
@@ -355,7 +365,7 @@ export default function CustomDesign() {
         onRotate={image.handleRotate}
         onRemoveUpload={image.removeUpload}
         onDeselectImage={image.handleDeselectImage}
-        /* AddText -> existing compatibility props */
+        // AddText existing compatibility props
         uploadedTexts={addText.uploadedTexts}
         selectedTextForEditing={addText.selectedTextForEditing}
         onTextClick={addText.handleTextClick}
@@ -366,14 +376,50 @@ export default function CustomDesign() {
         onDeselectText={addText.handleDeselectText}
         onDuplicateText={addText.duplicateText}
         getTextPath={addText.getTextPath}
-        /* ArtText -> new art props */
+        //  ArtText new art props 
         uploadedArtTexts={artText.uploadedArtTexts}
         selectedArtTextForEditing={artText.selectedArtTextForEditing}
         onArtTextClick={artText.handleTextClick}
         onArtTextDrag={artText.handleArtTextDrag}
         onArtDuplicateText={artText.handleDuplicateArtText}
         getArtTextPath={artText.getTextPath}
-      />
+      /> */}
+
+      <DesignCanvas
+  ref={image.canvasRef}
+  view={image.view}
+  uploadedImages={image.uploadedImages}
+  selectedImageForEditing={image.selectedImageForEditing}
+  onViewChange={image.handleViewChange}
+  onImageClick={image.handleImageClick}
+  onDrag={image.handleDrag}
+  onResize={image.handleResize}
+  onRotate={image.handleRotate}
+  onRemoveUpload={image.removeUpload}
+  onDeselectImage={image.handleDeselectImage}
+  /* Text */
+  uploadedTexts={addText.uploadedTexts}
+  selectedTextForEditing={addText.selectedTextForEditing}
+  onTextClick={addText.handleTextClick}
+  onTextDrag={addText.handleTextDrag}
+  onTextResize={addText.handleTextResize}
+  onTextRotate={addText.handleTextRotate}
+  onRemoveText={addText.handleRemoveText}
+  onDeselectText={addText.handleDeselectText}
+  onDuplicateText={addText.duplicateText}
+  getTextPath={addText.getTextPath}
+  /* Art Text */
+  uploadedArtTexts={artText.uploadedArtTexts}
+  selectedArtTextForEditing={artText.selectedArtTextForEditing}
+  onArtTextClick={artText.handleTextClick}
+  onArtTextDrag={artText.handleArtTextDrag}
+  onArtTextResize={artText.handleArtTextResize}      // ✅ NEW
+  onArtTextRotate={artText.handleArtTextRotate}      // ✅ NEW
+  onRemoveArtText={artText.handleRemoveArtText}      // ✅ NEW
+  onDuplicateArtText={artText.handleDuplicateArtText} // ✅ FIX NAME
+  getArtTextPath={artText.getTextPath}
+/>
+
     </div>
   );
 }

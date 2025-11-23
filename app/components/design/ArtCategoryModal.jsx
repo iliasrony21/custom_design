@@ -1,7 +1,7 @@
 "use client";
 
 export default function ArtCategoryModal({ onClose, onSelectCategory }) {
-  const categories = ["Emojis", "Shapes & Symbols", "Animals", "Sports", "Nature"];
+  const categories = ["Emojis", "Shapes & Symbols","sports & Games","Letters & Numbers", "Animals","Mascots","America","parties & Events","Military","Occupations","Colleges","Music","Transportation","Greek Life", "School","Charity","People","Religion","Food & Drink","Seasons & Holidays","Quotes & Phrases","Travel","Most Popular", "Sports", "Nature"];
 
   return (
     <div className="absolute inset-0 bg-white z-[100] p-6 overflow-y-auto">

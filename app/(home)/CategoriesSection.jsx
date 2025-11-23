@@ -20,7 +20,7 @@ export default function SectionDesignYourOwn() {
               Find a fit for everyone
             </h1>
             <Link
-              href="/"
+              href={'/design/custom_design'}
               className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl text-lg font-medium transition"
             >
               Get Started

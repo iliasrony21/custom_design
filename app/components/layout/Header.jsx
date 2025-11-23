@@ -90,7 +90,7 @@ export default function Header() {
           <h3 className="text-xl font-bold  uppercase mb-2">
             MENS
           </h3>
-          <ul className="space-y-2 text-[16px]">
+          <ul className="2xl:space-y-3 md:space-y-2 text-[16px] md:text-[16px] 2xl:text-[18px]">
             <li>
               <a
                 href="#"
@@ -156,7 +156,7 @@ export default function Header() {
           <h3 className="text-xl font-bold uppercase mb-2">
             Womens
           </h3>
-          <ul className="space-y-2 text-[16px]">
+          <ul className="2xl:space-y-3 md:space-y-2 text-[16px] md:text-[16px] 2xl:text-[18px]">
             <li>
               <a href="#" className="hover:text-red-500">
                 Rain Coat
@@ -200,7 +200,7 @@ export default function Header() {
           <h3 className="text-xl font-bold uppercase mb-2">
             Kids
           </h3>
-          <ul className="space-y-2 text-[16px]">
+          <ul className="2xl:space-y-3 md:space-y-2 text-[16px] md:text-[16px] 2xl:text-[18px]">
             <li>
               <a href="#" className="hover:text-red-500">
                 Rain Coat

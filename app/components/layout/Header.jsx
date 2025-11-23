@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo.png";
+import shopImage from "@/public/shop_image.jpg";
 
 import TopBar from "./TopBar";
 import Link from "next/link";
@@ -83,38 +84,38 @@ export default function Header() {
     // ),
 
     Shop: (
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_1fr_420px] gap-10 lg:gap-14">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_1fr_420px] gap-4 lg:gap-4">
         {/* Column 1 */}
         <div>
-          <h3 className="text-xl font-extrabold tracking-wide uppercase mb-6">
-            Shop Layout
+          <h3 className="text-xl font-bold  uppercase mb-2">
+            MENS
           </h3>
-          <ul className="space-y-4 text-[17px]">
+          <ul className="space-y-2 text-[16px]">
             <li>
               <a
                 href="#"
-                className="text-emerald-500 font-medium hover:text-red-500"
+                className="text-red-500 font-medium hover:text-red-500"
               >
-                Shop Grid Default
+                Trousers
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                Shop Grid 5 Columns
+                Rain Coat
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                Shop List
+                Windbreaker (Printed)
               </a>
             </li>
 
             <li className="flex items-center gap-2">
               <a href="#" className="hover:text-red-500">
-                Hidden Sidebar Fixed
+                Windbreaker (Cut & Sew)
               </a>
-              <span className="text-[11px] font-semibold bg-emerald-500 text-white px-2 py-[2px] rounded">
-                New
+              <span className="text-[11px] font-semibold bg-red-500 text-white px-2 py-[2px] rounded">
+                Windbreaker
               </span>
             </li>
 
@@ -122,19 +123,29 @@ export default function Header() {
               <a href="#" className="hover:text-red-500">
                 Hidden Sidebar Toggle
               </a>
-              <span className="text-[11px] font-semibold bg-emerald-500 text-white px-2 py-[2px] rounded">
+              <span className="text-[11px] font-semibold bg-red-500 text-white px-2 py-[2px] rounded">
                 New
               </span>
             </li>
 
             <li>
               <a href="#" className="hover:text-red-500">
-                Product Hover Style 1
+                Polos (Cut & Sew)
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                Product Hover Style 2
+                T-Shirt (Drop Shoulder)
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                T-Shirt (Long Sleeve)
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-red-500">
+                T-Shirt
               </a>
             </li>
           </ul>
@@ -142,21 +153,21 @@ export default function Header() {
 
         {/* Column 2 */}
         <div>
-          <h3 className="text-xl font-extrabold tracking-wide uppercase mb-6">
-            Product Layout
+          <h3 className="text-xl font-bold uppercase mb-2">
+            Womens
           </h3>
-          <ul className="space-y-4 text-[17px]">
+          <ul className="space-y-2 text-[16px]">
             <li>
               <a href="#" className="hover:text-red-500">
-                Simple Product
+                Rain Coat
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                Variable Product
+                T-Shirt
               </a>
             </li>
-            <li>
+            {/* <li>
               <a href="#" className="hover:text-red-500">
                 Horizontal Slide
               </a>
@@ -180,37 +191,37 @@ export default function Header() {
               <a href="#" className="hover:text-red-500">
                 Grid Gallery
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
 
         {/* Column 3 */}
         <div>
-          <h3 className="text-xl font-extrabold tracking-wide uppercase mb-6">
-            Woo Pages
+          <h3 className="text-xl font-bold uppercase mb-2">
+            Kids
           </h3>
-          <ul className="space-y-4 text-[17px]">
+          <ul className="space-y-2 text-[16px]">
             <li>
               <a href="#" className="hover:text-red-500">
-                Shop
+                Rain Coat
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                Cart
+                Hoodies
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                My account
+                Polos
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-red-500">
-                Checkout
+                T-Shirt
               </a>
             </li>
-            <li>
+            {/* <li>
               <a href="#" className="hover:text-red-500">
                 Wishlist
               </a>
@@ -224,17 +235,21 @@ export default function Header() {
               <a href="#" className="hover:text-red-500">
                 My Designs
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
 
         {/* Right Promo Banner */}
+        <Link href="/shopPage">
         <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-100 via-purple-100 to-pink-100 min-h-[280px] flex items-center">
-          <img
+          {/* <img
             src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop"
             alt="Promo"
             className="absolute inset-0 w-full h-full object-cover opacity-60"
-          />
+          /> */}
+         
+            <Image src={shopImage} alt="Logo" width={350} height={250} className="absolute inset-0 w-full h-full object-cover cursor-pointer" />
+          
           <div className="relative z-10 p-8">
             <span className="inline-block bg-violet-500 text-white text-sm font-semibold px-4 py-1 rounded-md mb-4">
               From $13
@@ -246,11 +261,12 @@ export default function Header() {
 
             <p className="text-lg mb-6">Design your own!</p>
 
-            <button className="bg-white text-black font-semibold px-8 py-4 rounded-xl shadow hover:shadow-md transition inline-flex items-center gap-3">
+            <button className="bg-white cursor-pointer text-black font-semibold px-8 py-4 rounded-xl shadow hover:shadow-md transition inline-flex items-center gap-3">
               Shop Now <span className="text-xl">→</span>
             </button>
           </div>
         </div>
+        </Link>
       </div>
     ),
 

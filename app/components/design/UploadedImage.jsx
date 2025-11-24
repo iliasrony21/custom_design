@@ -1,5 +1,23 @@
 import { X, RotateCw, Maximize2 } from "lucide-react";
+const ControlButton = ({ position, onClick, onMouseDown, icon: Icon, className,buttonSize = 28,
+  iconSize = 24, }) => {
+  const positionClasses = {
+    "top-left": "-top-2 -left-2",
+    "bottom-left": "-bottom-2 -left-2",
+    "bottom-right": "-bottom-2 -right-2",
+ 
+  };
 
+  return (
+    <button
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      className={`absolute ${positionClasses[position]} rounded-full p-1 shadow hover:scale-110 z-10 transition-transform ${className}`}
+    >
+      <Icon style={{ width: `${iconSize}px`, height: `${iconSize}px` }} />
+    </button>
+  );
+};
 const UploadedImage = ({
   image,
   isSelected,
@@ -114,6 +132,7 @@ const UploadedImage = ({
             onClick={handleRemove}
             icon={X}
             className="text-red-600 bg-white"
+        
           />
 
           <ControlButton
@@ -121,6 +140,7 @@ const UploadedImage = ({
             onMouseDown={handleRotateStart}
             icon={RotateCw}
             className="text-blue-600 bg-white"
+            
           />
 
           <ControlButton
@@ -128,6 +148,7 @@ const UploadedImage = ({
             onMouseDown={handleResizeStart}
             icon={Maximize2}
             className="text-green-600 bg-white cursor-se-resize"
+             
           />
         </>
       )}
@@ -135,22 +156,6 @@ const UploadedImage = ({
   );
 };
 
-const ControlButton = ({ position, onClick, onMouseDown, icon: Icon, className }) => {
-  const positionClasses = {
-    "top-left": "-top-2 -left-2",
-    "bottom-left": "-bottom-2 -left-2",
-    "bottom-right": "-bottom-2 -right-2",
-  };
 
-  return (
-    <button
-      onClick={onClick}
-      onMouseDown={onMouseDown}
-      className={`absolute ${positionClasses[position]} rounded-full p-1 shadow hover:scale-110 z-10 transition-transform ${className}`}
-    >
-      <Icon className="w-3 h-3" />
-    </button>
-  );
-};
 
 export default UploadedImage;

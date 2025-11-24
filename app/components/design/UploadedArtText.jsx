@@ -276,31 +276,31 @@ return (
     {isSelected && (
       <>
         <button
-          className="absolute -right-2 -top-2 remove-handle bg-red-500 text-white rounded-full p-1"
+          className="absolute -right-2 -top-4 remove-handle bg-red-500 text-white rounded-full p-1"
           onClick={(e) => {
             e.stopPropagation();
             onRemove(text.id);
           }}
         >
-          <X className="w-3 h-3" />
+          <X className="w-4 h-4" />
         </button>
 
-        <div className="absolute -right-1 -bottom-1 resize-handle">
-          <IoIosResize className="w-3 h-3 text-white bg-blue-500 rounded-full p-1" />
+        <div className="absolute -right-3 -bottom-3 resize-handle">
+          <IoIosResize className="w-6 h-6 text-white bg-blue-500 rounded-full p-1" />
         </div>
 
-        <div className="absolute -left-2 -top-2 rotate-handle">
-          <RotateCcw className="w-5 h-5 text-blue-500 bg-white rounded-full p-1" />
+        <div className="absolute -left-2 -top-3 rotate-handle">
+          <RotateCcw className="w-6 h-6 text-blue-500 bg-white rounded-full p-1" />
         </div>
 
         <button
-          className="absolute -left-2 -bottom-2 duplicate-handle"
+          className="absolute -left-3 -bottom-3 duplicate-handle"
           onClick={(e) => {
             e.stopPropagation();
             onDuplicate(text.id);
           }}
         >
-          <HiOutlineDuplicate className="w-5 h-5 bg-green-500 rounded-full text-white p-1" />
+          <HiOutlineDuplicate className="w-6 h-6 bg-green-500 rounded-full text-white p-1" />
         </button>
       </>
     )}

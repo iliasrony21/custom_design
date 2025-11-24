@@ -197,28 +197,28 @@ const UploadedText = ({
           <>
             {/* Remove */}
             <button
-              className="remove-handle absolute -top-3 -right-3 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md border-2 border-white hover:bg-red-600 pointer-events-auto"
+              className="remove-handle absolute -top-4 -right-4 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md border-2 border-white hover:bg-red-600 pointer-events-auto"
               onClick={(e) => { e.stopPropagation(); onRemove(text.id); }}
             >
-              <X className="w-3 h-3" />
+              <X className="w-7 h-7" />
             </button>
 
             {/* Resize */}
-            <div className="resize-handle absolute -bottom-2 -right-2 w-5 h-5 bg-blue-500 border-2 border-white rounded-full cursor-se-resize shadow-md flex items-center justify-center pointer-events-auto">
-              <IoIosResize className="w-3 h-3 text-white" />
+            <div className="resize-handle absolute -bottom-3 -right-3 w-7 h-7 bg-blue-500 border-2 border-white rounded-full cursor-se-resize shadow-md flex items-center justify-center pointer-events-auto">
+              <IoIosResize className="w-4 h-7 text-white" />
             </div>
 
             {/* Rotate */}
-            <div className="rotate-handle absolute -bottom-8 left-1/2 -translate-x-1/2 w-6 h-6 bg-white text-gray-700 border border-gray-300 rounded-full cursor-grab flex items-center justify-center shadow-md hover:bg-gray-50 pointer-events-auto">
+            <div className="rotate-handle absolute -bottom-4 left-1/2 -translate-x-1/2 w-6 h-6 bg-white text-gray-700 border border-gray-300 rounded-full cursor-grab flex items-center justify-center shadow-md hover:bg-gray-50 pointer-events-auto">
               <RotateCcw className="w-3 h-3 text-blue-500" />
             </div>
 
             {/* Duplicate */}
             <button
-              className="duplicate-handle absolute -top-3 -left-3 w-6 h-6 bg-green-500 text-white rounded-full shadow-md border-2 border-white flex items-center justify-center hover:bg-green-600 pointer-events-auto"
+              className="duplicate-handle absolute -top-3 -left-3 w-7 h-7 bg-green-500 text-white rounded-full shadow-md border-2 border-white flex items-center justify-center hover:bg-green-600 pointer-events-auto"
               onClick={(e) => { e.stopPropagation(); onDuplicate && onDuplicate(text.id); }}
             >
-              <HiOutlineDuplicate className="w-3 h-3" />
+              <HiOutlineDuplicate className="w-4 h-4" />
             </button>
           </>
         )}
